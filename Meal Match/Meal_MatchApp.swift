@@ -9,9 +9,14 @@ import SwiftUI
 
 @main
 struct Meal_MatchApp: App {
+    
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate 
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            NavigationStack {
+                            Splash()
+                        }
         }
     }
 }
