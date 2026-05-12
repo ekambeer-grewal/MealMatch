@@ -14,6 +14,8 @@ import SwiftUI
 
 struct Profile: View {
     
+    @Environment(AppController.self) private var appController
+    
     // Variable for action on create profile button
     @State private var showHome: Bool = false
     
@@ -192,4 +194,5 @@ struct Profile: View {
 
 #Preview {
     Profile()
+        .environment(AppController())
 }

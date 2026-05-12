@@ -12,11 +12,14 @@ struct Meal_MatchApp: App {
     
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate 
     
+    @State private var appController = AppController()
+    
     var body: some Scene {
         WindowGroup {
             NavigationStack {
                             Splash()
                         }
+                        .environment(appController)
         }
     }
 }

@@ -14,6 +14,8 @@ import Combine
 
 struct Splash: View {
     
+    @Environment(AppController.self) private var appController
+    
     // Timer for auto scroll images
     private let timer = Timer.publish(every: 4, on: .main, in: .common).autoconnect()
 
@@ -143,4 +145,5 @@ struct Splash: View {
     
 #Preview {
     Splash()
+        .environment(AppController())
 }

@@ -12,14 +12,12 @@ import SwiftUI
 
 struct SignUp: View {
     
+    @Environment(AppController.self) private var appController
+    
     // Variable for action on buttons
     @State private var showLogin: Bool = false
     @State private var showProfile: Bool = false
     
-    // Variables save input from user
-    @State private var email: String = ""
-    @State private var password: String = ""
-    @State private var confirmPassword: String = ""
     
     var body: some View {
         ZStack{
@@ -42,26 +40,27 @@ struct SignUp: View {
                     .font(.system(size: 20))
                     
                 
-                TextField("Email", text: $email)
+                TextField("Email", text: Bindable(appController).email)
                     .ghostTextField()
                     
                 // Input password from user to setup account
                 Text("Password")
                     .font(.system(size: 20))
                 
-                SecureField("Password", text: $password)
+                SecureField("Password", text: Bindable(appController).password)
                     .ghostSecureField()
                 
                 // Re-enter password to confirm it
                 Text("Confirm Password")
                     .font(.system(size: 20))
                 
-                SecureField("Confirm Password", text: $confirmPassword)
+                SecureField("Confirm Password", text: Bindable(appController).confirmPassword)
                     .ghostSecureField()
                 
                 // Button that navigate to Profile page
                 Button(action: {
                     showProfile = true
+                    authenticate()
                 }) {
                     Text("Sign Up")
                         .ghostButton()
@@ -92,9 +91,19 @@ struct SignUp: View {
         }
     }
     
-    
+    func authenticate(){
+        Task {
+            do{
+                if appController.password == appController.confirmPassword{
+                    try await appController.SignUp()
+                }} catch {
+                    print(error.localizedDescription)
+                }
+            }
+        }
 }
 
 #Preview {
     SignUp()
+        .environment(AppController())
 }

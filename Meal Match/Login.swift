@@ -13,13 +13,12 @@ import SwiftUI
 
 struct Login: View {
     
+    @Environment(AppController.self) private var appController
+    
     // Bool variables to put logic on buttons
     @State private var showSignUp = false
     @State private var showHome = false
     
-    // Variables to store user input
-    @State private var email: String = ""
-    @State private var password: String = ""
     
     var body: some View {
         ZStack{
@@ -42,7 +41,7 @@ struct Login: View {
                     .font(.system(size: 20))
                     
                 
-                TextField("Email", text: $email)
+                TextField("Email", text: Bindable(appController).email)
                     .ghostTextField()
                     .padding(.bottom, 30)
                     
@@ -51,13 +50,14 @@ struct Login: View {
                 Text("Password")
                     .font(.system(size: 20))
                 
-                SecureField("Password", text: $password)
+                SecureField("Password", text: Bindable(appController).password)
                     .ghostSecureField()
                 
                 
                 // Log user in and navigate to home page
                 Button(action: {
                     showHome = true
+                    authenticate()
                 }) {
                     Text("Login")
                         .ghostButton()
@@ -87,8 +87,19 @@ struct Login: View {
             }
         }
     }
+    
+    func authenticate(){
+        Task {
+            do{
+                try await appController.LogIn()
+            } catch {
+                    print(error.localizedDescription)
+            }
+        }
+    }
 }
 
 #Preview {
     Login()
+        .environment(AppController())
 }
